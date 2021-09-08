@@ -2,6 +2,9 @@ package io.szflis;
 
 public class Simulation {
 
+    public static int DEAD  = 0;
+    public static int ALIVE  = 1;
+
     int width;
     int height;
     int[][] board;
@@ -13,29 +16,12 @@ public class Simulation {
         this.board = new int[width][height];
     }
 
-    public void printBoard() {
-        System.out.println("---");
-        for (int y = 0; y < height; y++) {
-            String line = "|";
-            for (int x = 0; x < width; x++) {
-                if (this.board[x][y] == 0) {
-                    line += ".";
-                } else {
-                    line += "*";
-                }
-            }
-            line += "|";
-            System.out.println(line);
-        }
-        System.out.println("---");
-    }
-
     public void setAlive(int x, int y) {
-        setState(x, y, 1);
+        setState(x, y, ALIVE);
     }
 
     public void setDead(int x, int y) {
-        setState(x, y, 0);
+        setState(x, y, DEAD);
     }
 
     public void setState(int x, int y, int state) {
@@ -69,11 +55,11 @@ public class Simulation {
 
     public int getState(int x, int y) {
         if (x < 0 || x >= width) {
-            return 0;
+            return DEAD;
         }
 
         if (y < 0 || y >= height) {
-            return 0;
+            return DEAD;
         }
 
         return this.board[x][y];
@@ -85,17 +71,17 @@ public class Simulation {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int aliveNeighbours = countAliveNeighbours(x,y);
-                if (getState(x,y) == 1) {
+                if (getState(x,y) == ALIVE) {
                     if (aliveNeighbours < 2) {
-                        newBoard[x][y] = 0;
+                        newBoard[x][y] = DEAD;
                     } else if (aliveNeighbours == 2 || aliveNeighbours == 3) {
-                        newBoard[x][y] = 1;
+                        newBoard[x][y] = ALIVE;
                     } else if (aliveNeighbours > 3) {
-                        newBoard[x][y] = 0;
+                        newBoard[x][y] = DEAD;
                     }
                 } else {
                     if (aliveNeighbours == 3) {
-                        newBoard[x][y] = 1;
+                        newBoard[x][y] = ALIVE;
                     }
                 }
             }
@@ -104,19 +90,19 @@ public class Simulation {
         this.board = newBoard;
     }
 
-    public static void main(String[] args) {
-        Simulation simulation = new Simulation(8,5);
-        simulation.setAlive(2,2);
-        simulation.setAlive(2,3);
-        simulation.setAlive(2,4);
-        simulation.printBoard();
-
-        System.out.println(simulation.countAliveNeighbours(2,3));
-        System.out.println(simulation.countAliveNeighbours(4,2));
-
-        simulation.step();
-
-        simulation.printBoard();
-
-    }
+//    public static void main(String[] args) {
+//        Simulation simulation = new Simulation(8,5);
+//        simulation.setAlive(2,2);
+//        simulation.setAlive(2,3);
+//        simulation.setAlive(2,4);
+//        simulation.printBoard();
+//
+//        System.out.println(simulation.countAliveNeighbours(2,3));
+//        System.out.println(simulation.countAliveNeighbours(4,2));
+//
+//        simulation.step();
+//
+//        simulation.printBoard();
+//
+//    }
 }
