@@ -1,4 +1,4 @@
-package io.szflis;
+package io.szflis.gameoflife;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

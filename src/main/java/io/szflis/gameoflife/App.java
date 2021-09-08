@@ -1,9 +1,7 @@
-package io.szflis;
+package io.szflis.gameoflife;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class App extends Application {

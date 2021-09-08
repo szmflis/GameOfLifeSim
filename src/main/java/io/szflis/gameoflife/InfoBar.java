@@ -1,4 +1,4 @@
-package io.szflis;
+package io.szflis.gameoflife;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

@@ -1,9 +1,8 @@
-package io.szflis;
+package io.szflis.gameoflife;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -55,7 +54,7 @@ public class MainView extends VBox {
         this.affine = new Affine();
         this.affine.appendScale(400/10f, 400/10f);
 
-        this.initialSimulation = new Simulation(40,40);
+        this.initialSimulation = new Simulation(10,10);
         this.simulation = Simulation.copy(initialSimulation);
     }
 

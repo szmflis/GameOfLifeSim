@@ -1,4 +1,4 @@
-package io.szflis;
+package io.szflis.gameoflife;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

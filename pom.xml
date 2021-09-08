@@ -31,7 +31,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>io.szflis.App</mainClass>
+                    <mainClass>io.szflis.gameoflife.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
