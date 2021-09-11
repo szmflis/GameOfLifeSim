@@ -1,5 +1,9 @@
 package io.szflis.gameoflife;
 
+import io.szflis.gameoflife.model.Board;
+import io.szflis.gameoflife.model.BoundedBoard;
+import io.szflis.gameoflife.model.CellState;
+import io.szflis.gameoflife.model.StandardRule;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,18 +22,16 @@ public class MainView extends VBox {
     public static final int EDITING = 0;
     public static final int SIMULATING = 1;
 
-    private Canvas canvas;
+
     private Simulation simulation;
-    private Simulation initialSimulation;
+    private Board initialBoard;
+
+    private Canvas canvas;
     private Affine affine;
-
     private InfoBar infoBar;
-
-    private int drawMode = Simulation.ALIVE;
-
+    private CellState drawMode = CellState.ALIVE;
     private int applicationState = EDITING;
 
-    private Simulator simulator;
 
     public MainView() {
         this.canvas = new Canvas(400, 400);
@@ -54,15 +56,14 @@ public class MainView extends VBox {
         this.affine = new Affine();
         this.affine.appendScale(400/10f, 400/10f);
 
-        this.initialSimulation = new Simulation(10,10);
-        this.simulation = Simulation.copy(initialSimulation);
+        this.initialBoard = new BoundedBoard(10,10);
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.D) {
-            this.drawMode = Simulation.ALIVE;
+            this.drawMode = CellState.ALIVE;
         } else if (keyEvent.getCode() == KeyCode.E) {
-            this.drawMode = Simulation.DEAD;
+            this.drawMode = CellState.DEAD;
         }
     }
 
@@ -73,7 +74,7 @@ public class MainView extends VBox {
         int simX = (int) simCoord.getX();
         int simY = (int) simCoord.getY();
 
-        this.initialSimulation.setState(simX, simY, drawMode);
+        this.initialBoard.setState(simX, simY, drawMode);
         draw();
     }
 
@@ -105,27 +106,27 @@ public class MainView extends VBox {
         gc.setFill(Color.BLACK);
 
         if (applicationState == EDITING) {
-            drawSimulation(this.initialSimulation);
+            drawSimulation(this.initialBoard);
         } else {
-            drawSimulation(this.simulation);
+            drawSimulation(this.simulation.getBoard());
         }
 
         gc.setStroke(Color.GREY);
         gc.setLineWidth(0.05f);
-        for (int x = 0; x <= this.simulation.width; x++) {
+        for (int x = 0; x <= this.initialBoard.getWidth(); x++) {
             gc.strokeLine(x,0,x,10);
         }
 
-        for (int y = 0; y <= this.simulation.width; y++) {
+        for (int y = 0; y <= this.initialBoard.getHeight(); y++) {
             gc.strokeLine(0,y,10,y);
         }
     }
 
-    private void drawSimulation(Simulation simulationToDraw) {
+    private void drawSimulation(Board simulationToDraw) {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
-        for (int x = 0; x < simulationToDraw.width; x++) {
-            for (int y = 0; y < simulationToDraw.height; y++) {
-                if (simulationToDraw.getState(x,y) == Simulation.ALIVE) {
+        for (int x = 0; x < simulationToDraw.getWidth(); x++) {
+            for (int y = 0; y < simulationToDraw.getHeight(); y++) {
+                if (simulationToDraw.getState(x,y) == CellState.ALIVE) {
                     gc.fillRect(x,y,1,1);
                 }
             }
@@ -137,9 +138,7 @@ public class MainView extends VBox {
 
         this.applicationState = applicationState;
         if (applicationState == SIMULATING) {
-            this.simulation = Simulation.copy(this.initialSimulation);
-            this.simulator = new Simulator(this, this.simulation);
-            this.simulator.start();
+            this.simulation = new Simulation(this.initialBoard, new StandardRule());
         }
 
         System.out.println(this.applicationState);
@@ -151,12 +150,12 @@ public class MainView extends VBox {
         return simulation;
     }
 
-    public void setDrawMode(int newDrawMode) {
+    public void setDrawMode(CellState newDrawMode) {
         drawMode = newDrawMode;
         this.infoBar.setDrawMode(newDrawMode);
     }
 
-    public Simulator getSimulator() {
-        return simulator;
+    public int getApplicationState() {
+        return applicationState;
     }
 }
