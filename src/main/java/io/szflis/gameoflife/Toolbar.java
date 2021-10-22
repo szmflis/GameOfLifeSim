@@ -1,27 +1,23 @@
 package io.szflis.gameoflife;
 
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.model.StandardRule;
-import io.szflis.gameoflife.viewmodel.ApplicationState;
-import io.szflis.gameoflife.viewmodel.ApplicationViewModel;
-import io.szflis.gameoflife.viewmodel.BoardViewModel;
+import io.szflis.gameoflife.viewmodel.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {
 
-    private final MainView mainView;
     private ApplicationViewModel applicationViewModel;
-    private BoardViewModel boardViewModel;
-    private Simulator simulator;
+    private SimulationViewModel simulationViewModel;
+    private EditorViewModel editorViewModel;
 
-    public Toolbar(MainView mainView,
+    public Toolbar(EditorViewModel editorViewModel,
                    ApplicationViewModel applicationViewModel,
-                   BoardViewModel boardViewModel) {
-        this.mainView = mainView;
+                   SimulationViewModel simulationViewModel) {
+        this.editorViewModel = editorViewModel;
         this.applicationViewModel = applicationViewModel;
-        this.boardViewModel = boardViewModel;
+        this.simulationViewModel = simulationViewModel;
 
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
@@ -45,39 +41,36 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleStop(ActionEvent actionEvent) {
-        this.simulator.stop();
+        this.simulationViewModel.stop();
     }
 
     private void handleStart(ActionEvent actionEvent) {
         switchToSimulatingState();
-        this.simulator.start();
+        this.simulationViewModel.start();
     }
 
     private void handleReset(ActionEvent actionEvent) {
         System.out.println("Pressed reset");
         this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
-        this.simulator = null;
     }
 
     private void handleStep(ActionEvent actionEvent) {
         System.out.println("Pressed step");
         switchToSimulatingState();
-        this.simulator.doStep();
+        this.simulationViewModel.doStep();
     }
 
     private void handleErase(ActionEvent actionEvent) {
         System.out.println("Pressed erase");
-        mainView.setDrawMode(CellState.DEAD);
+        editorViewModel.setDrawMode(CellState.DEAD);
     }
 
     private void handleDraw(ActionEvent actionEvent) {
         System.out.println("Pressed draw");
-        mainView.setDrawMode(CellState.ALIVE);
+        editorViewModel.setDrawMode(CellState.ALIVE);
     }
 
     private void switchToSimulatingState() {
         this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
-        Simulation simulation = new Simulation(boardViewModel.getBoard(), new StandardRule());
-        this.simulator = new Simulator(simulation, this.boardViewModel);
     }
 }

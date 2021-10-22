@@ -2,9 +2,10 @@ package io.szflis.gameoflife;
 
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.viewmodel.ApplicationState;
 import io.szflis.gameoflife.viewmodel.ApplicationViewModel;
 import io.szflis.gameoflife.viewmodel.BoardViewModel;
+import io.szflis.gameoflife.viewmodel.EditorViewModel;
+import io.szflis.gameoflife.viewmodel.SimulationViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,26 +21,21 @@ import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MainView extends VBox {
 
-    private Board initialBoard;
+    private EditorViewModel editorViewModel;
+    private BoardViewModel boardViewModel;
 
     private Canvas canvas;
     private Affine affine;
     private InfoBar infoBar;
-    private CellState drawMode = CellState.ALIVE;
 
-    private ApplicationViewModel applicationViewModel;
-    private BoardViewModel boardViewModel;
-    private boolean isDrawingEnabled = true;
-    private boolean drawInitialBoard = true;
 
     public MainView(ApplicationViewModel applicationViewModel,
-                    BoardViewModel boardViewModel, Board initialBoard) {
-        this.applicationViewModel = applicationViewModel;
+                    BoardViewModel boardViewModel,
+                    EditorViewModel editorViewModel,
+                    SimulationViewModel simulationViewModel) {
         this.boardViewModel = boardViewModel;
-        this.initialBoard = initialBoard;
+        this.editorViewModel = editorViewModel;
         this.boardViewModel.listenToBoard(this::onBoardChanged);
-
-        this.applicationViewModel.listenToApplicationState(this::onApplicationStateChanged);
 
         this.canvas = new Canvas(400, 400);
         this.canvas.setOnMousePressed(this::handleDraw);
@@ -48,9 +44,8 @@ public class MainView extends VBox {
 
         this.setOnKeyPressed(this::onKeyPressed);
 
-        Toolbar toolbar = new Toolbar(this, applicationViewModel, boardViewModel);
-        this.infoBar = new InfoBar();
-        this.infoBar.setDrawMode(this.drawMode);
+        Toolbar toolbar = new Toolbar(editorViewModel, applicationViewModel, simulationViewModel);
+        this.infoBar = new InfoBar(editorViewModel);
         this.infoBar.setCursorPos(0,0);
 
         Pane spacer = new Pane();
@@ -69,34 +64,21 @@ public class MainView extends VBox {
         draw(board);
     }
 
-    private void onApplicationStateChanged(ApplicationState state) {
-        if (state == ApplicationState.EDITING) {
-            this.isDrawingEnabled = true;
-            this.boardViewModel.setBoard(this.initialBoard);
-        } else if(state == ApplicationState.SIMULATING) {
-            this.isDrawingEnabled = false;
-        } else {
-            throw new IllegalArgumentException("Unsupported ApplicationState " + state.name());
-        }
-    }
-
     private void onKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.D) {
-            this.drawMode = CellState.ALIVE;
+            this.editorViewModel.setDrawMode(CellState.ALIVE);
         } else if (keyEvent.getCode() == KeyCode.E) {
-            this.drawMode = CellState.DEAD;
+            this.editorViewModel.setDrawMode(CellState.DEAD);
         }
     }
 
     private void handleDraw(MouseEvent mouseEvent) {
-        if (!isDrawingEnabled) return;
 
         Point2D simCoord = getPointSimCoords(mouseEvent);
         int simX = (int) simCoord.getX();
         int simY = (int) simCoord.getY();
 
-        this.initialBoard.setState(simX, simY, drawMode);
-        this.boardViewModel.setBoard(this.initialBoard);
+        this.editorViewModel.boardPressed(simX, simY);
     }
 
     private void handleMoved(MouseEvent mouseEvent) {
@@ -150,8 +132,4 @@ public class MainView extends VBox {
         }
     }
 
-    public void setDrawMode(CellState newDrawMode) {
-        drawMode = newDrawMode;
-        this.infoBar.setDrawMode(newDrawMode);
-    }
 }

@@ -1,6 +1,7 @@
 package io.szflis.gameoflife;
 
 import io.szflis.gameoflife.model.CellState;
+import io.szflis.gameoflife.viewmodel.EditorViewModel;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -14,7 +15,8 @@ public class InfoBar extends HBox {
     private Label cursor;
     private Label editingTool;
 
-    public InfoBar() {
+    public InfoBar(EditorViewModel editorViewModel) {
+        editorViewModel.listenToDrawMode(this::setDrawMode);
         this.cursor = new Label();
         this.editingTool = new Label();
 
@@ -26,7 +28,7 @@ public class InfoBar extends HBox {
         this.getChildren().addAll(editingTool, spacer, cursor);
     }
 
-    public void setDrawMode(CellState drawMode) {
+    private void setDrawMode(CellState drawMode) {
         String drawModeString;
         if (drawMode == CellState.ALIVE) {
             drawModeString = "Drawing";

@@ -24,8 +24,6 @@ public class ApplicationViewModel {
         }
     }
 
-
-
     private void notifyAppStateListeners() {
         for (SimpleChangeListener<ApplicationState> appStateListener : appStateListeners) {
             appStateListener.valueChanged(this.currentState);
