@@ -1,6 +1,10 @@
 package io.szflis.gameoflife;
 
 import io.szflis.gameoflife.model.CellState;
+import io.szflis.gameoflife.model.StandardRule;
+import io.szflis.gameoflife.viewmodel.ApplicationState;
+import io.szflis.gameoflife.viewmodel.ApplicationViewModel;
+import io.szflis.gameoflife.viewmodel.BoardViewModel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -8,11 +12,16 @@ import javafx.scene.control.ToolBar;
 public class Toolbar extends ToolBar {
 
     private final MainView mainView;
-
+    private ApplicationViewModel applicationViewModel;
+    private BoardViewModel boardViewModel;
     private Simulator simulator;
 
-    public Toolbar(MainView mainView) {
+    public Toolbar(MainView mainView,
+                   ApplicationViewModel applicationViewModel,
+                   BoardViewModel boardViewModel) {
         this.mainView = mainView;
+        this.applicationViewModel = applicationViewModel;
+        this.boardViewModel = boardViewModel;
 
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
@@ -46,16 +55,14 @@ public class Toolbar extends ToolBar {
 
     private void handleReset(ActionEvent actionEvent) {
         System.out.println("Pressed reset");
-        this.mainView.setApplicationState(MainView.EDITING);
+        this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
         this.simulator = null;
-        this.mainView.draw();
     }
 
     private void handleStep(ActionEvent actionEvent) {
         System.out.println("Pressed step");
         switchToSimulatingState();
-        mainView.getSimulation().step();
-        mainView.draw();
+        this.simulator.doStep();
     }
 
     private void handleErase(ActionEvent actionEvent) {
@@ -69,9 +76,8 @@ public class Toolbar extends ToolBar {
     }
 
     private void switchToSimulatingState() {
-        if (this.mainView.getApplicationState() == MainView.EDITING) {
-            this.mainView.setApplicationState(MainView.SIMULATING);
-            this.simulator = new Simulator(this.mainView, this.mainView.getSimulation());
-        }
+        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
+        Simulation simulation = new Simulation(boardViewModel.getBoard(), new StandardRule());
+        this.simulator = new Simulator(simulation, this.boardViewModel);
     }
 }

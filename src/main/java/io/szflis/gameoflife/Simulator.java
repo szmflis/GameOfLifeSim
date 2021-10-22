@@ -1,26 +1,26 @@
 package io.szflis.gameoflife;
 
+import io.szflis.gameoflife.viewmodel.BoardViewModel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.util.Duration;
 
 public class Simulator {
 
     private Timeline timeline;
-    private MainView mainView;
     private Simulation simulation;
+    private BoardViewModel boardViewModel;
 
-    public Simulator(MainView mainView, Simulation simulation) {
-        this.mainView = mainView;
+    public Simulator(Simulation simulation, BoardViewModel boardViewModel) {
         this.simulation = simulation;
-        this.timeline = new Timeline(new KeyFrame(Duration.millis(200), this::doStep));
+        this.boardViewModel = boardViewModel;
+        this.timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> doStep()));
         this.timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
-    private void doStep(ActionEvent actionEvent) {
+    public void doStep() {
         this.simulation.step();
-        this.mainView.draw();
+        this.boardViewModel.setBoard(this.simulation.getBoard());
     }
 
     public void start() {
