@@ -1,35 +1,16 @@
 package io.szflis.gameoflife.viewmodel;
 
 import io.szflis.gameoflife.model.Board;
-
-import java.util.LinkedList;
-import java.util.List;
+import io.szflis.gameoflife.util.Property;
 
 public class BoardViewModel {
 
-    private Board board;
-    private List<SimpleChangeListener<Board>> boardListeners;
+    private Property<Board> board = new Property<>();
 
     public BoardViewModel() {
-        boardListeners = new LinkedList<>();
     }
 
-    public void listenToBoard(SimpleChangeListener<Board> listener) {
-        boardListeners.add(listener);
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-        notifyBoardListeners();
-    }
-
-    private void notifyBoardListeners() {
-        for (SimpleChangeListener<Board> boardListener : boardListeners) {
-            boardListener.valueChanged(this.board);
-        }
-    }
-
-    public Board getBoard() {
+    public Property<Board> getBoard() {
         return this.board;
     }
 }

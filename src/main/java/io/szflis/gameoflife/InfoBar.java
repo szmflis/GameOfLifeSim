@@ -16,7 +16,7 @@ public class InfoBar extends HBox {
     private Label editingTool;
 
     public InfoBar(EditorViewModel editorViewModel) {
-        editorViewModel.listenToDrawMode(this::setDrawMode);
+        editorViewModel.getDrawMode().listen(this::setDrawMode);
         this.cursor = new Label();
         this.editingTool = new Label();
 
@@ -24,6 +24,8 @@ public class InfoBar extends HBox {
         spacer.setMinSize(0,0);
         spacer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        this.setCursorPos(0,0);
 
         this.getChildren().addAll(editingTool, spacer, cursor);
     }

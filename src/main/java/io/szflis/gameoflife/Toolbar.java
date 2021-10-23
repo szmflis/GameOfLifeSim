@@ -51,7 +51,7 @@ public class Toolbar extends ToolBar {
 
     private void handleReset(ActionEvent actionEvent) {
         System.out.println("Pressed reset");
-        this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
+        this.applicationViewModel.getApplicationState().set(ApplicationState.EDITING);
     }
 
     private void handleStep(ActionEvent actionEvent) {
@@ -62,15 +62,15 @@ public class Toolbar extends ToolBar {
 
     private void handleErase(ActionEvent actionEvent) {
         System.out.println("Pressed erase");
-        editorViewModel.setDrawMode(CellState.DEAD);
+        editorViewModel.getDrawMode().set(CellState.DEAD);
     }
 
     private void handleDraw(ActionEvent actionEvent) {
         System.out.println("Pressed draw");
-        editorViewModel.setDrawMode(CellState.ALIVE);
+        editorViewModel.getDrawMode().set(CellState.ALIVE);
     }
 
     private void switchToSimulatingState() {
-        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
+        this.applicationViewModel.getApplicationState().set(ApplicationState.SIMULATING);
     }
 }

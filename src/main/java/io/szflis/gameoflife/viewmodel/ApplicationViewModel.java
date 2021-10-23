@@ -1,34 +1,15 @@
 package io.szflis.gameoflife.viewmodel;
 
-import java.util.LinkedList;
-import java.util.List;
+import io.szflis.gameoflife.util.Property;
 
 public class ApplicationViewModel {
 
-    private ApplicationState currentState;
-    private final List<SimpleChangeListener<ApplicationState>> appStateListeners;
+    private Property<ApplicationState> applicationState = new Property<>(ApplicationState.EDITING);
 
-    public ApplicationViewModel(ApplicationState applicationState) {
-        this.currentState = applicationState;
-        this.appStateListeners = new LinkedList<>();
+    public ApplicationViewModel() {
     }
 
-    public void listenToApplicationState(SimpleChangeListener<ApplicationState> simpleChangeListener) {
-        this.appStateListeners.add(simpleChangeListener);
+    public Property<ApplicationState> getApplicationState() {
+        return applicationState;
     }
-
-    public void setCurrentState(ApplicationState newState) {
-        if (newState != this.currentState) {
-            this.currentState = newState;
-            notifyAppStateListeners();
-        }
-    }
-
-    private void notifyAppStateListeners() {
-        for (SimpleChangeListener<ApplicationState> appStateListener : appStateListeners) {
-            appStateListener.valueChanged(this.currentState);
-        }
-    }
-
-
 }
