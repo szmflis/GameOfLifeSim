@@ -12,6 +12,7 @@ public class Property<T> {
 
     public Property(T value) {
         this.value = value;
+        System.out.println("Property initialized to value: " + value);
     }
 
     public Property() {
@@ -19,6 +20,7 @@ public class Property<T> {
     }
 
     public void listen(SimpleChangeListener<T> listener) {
+        System.out.println("Adding change listener");
         this.listeners.add(listener);
     }
 
@@ -29,8 +31,13 @@ public class Property<T> {
 
     private void notifyListeners() {
         for (SimpleChangeListener<T> listener : listeners) {
+            System.out.println("Informing listener about change");
             listener.valueChanged(this.value);
         }
+    }
+
+    public boolean isPresent() {
+        return value != null;
     }
 
     public T get() {
