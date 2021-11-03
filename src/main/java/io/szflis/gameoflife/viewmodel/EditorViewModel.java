@@ -19,6 +19,21 @@ public class EditorViewModel {
         this.editingBoard = initialEditingBoard;
     }
 
+    public void handle(DrawModeEvent drawModeEvent) {
+        this.drawMode.set(drawModeEvent.getDrawMode());
+    }
+
+    public void handle(BoardEvent boardEvent) {
+        switch (boardEvent.getEventType()) {
+            case PRESSED:
+                boardPressed(boardEvent.getCursorPosition());
+                break;
+            case MOVED:
+                cursorPosition.set(boardEvent.getCursorPosition());
+                break;
+        }
+    }
+
     public void onAppStateChanged(ApplicationState state) {
         System.out.println("EditorViewModel got a ping about ppp state change to: " + state);
         if (state == ApplicationState.EDITING) {
@@ -29,7 +44,8 @@ public class EditorViewModel {
         }
     }
 
-    public void boardPressed(CellPosition cellPosition) {
+    private void boardPressed(CellPosition cellPosition) {
+        this.cursorPosition.set(cellPosition);
         if (drawingEnabled) {
             this.editingBoard.setState(cellPosition.getX(), cellPosition.getY(), drawMode.get());
             this.boardViewModel.getBoard().set(this.editingBoard);
@@ -42,5 +58,9 @@ public class EditorViewModel {
 
     public Property<CellPosition> getCursorPosition() {
         return cursorPosition;
+    }
+
+    public Board getBoard() {
+        return this.editingBoard;
     }
 }

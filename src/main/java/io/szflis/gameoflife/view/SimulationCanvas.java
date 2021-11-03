@@ -3,6 +3,8 @@ package io.szflis.gameoflife.view;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
+import io.szflis.gameoflife.util.event.EventBus;
+import io.szflis.gameoflife.viewmodel.BoardEvent;
 import io.szflis.gameoflife.viewmodel.BoardViewModel;
 import io.szflis.gameoflife.viewmodel.EditorViewModel;
 import javafx.geometry.Point2D;
@@ -20,10 +22,12 @@ public class SimulationCanvas extends Pane {
     private Affine affine;
     private EditorViewModel editorViewModel;
     private BoardViewModel boardViewModel;
+    private EventBus eventBus;
 
-    public SimulationCanvas(EditorViewModel editorViewModel, BoardViewModel boardViewModel) {
+    public SimulationCanvas(EditorViewModel editorViewModel, BoardViewModel boardViewModel, EventBus eventBus) {
         this.editorViewModel = editorViewModel;
         this.boardViewModel = boardViewModel;
+        this.eventBus = eventBus;
         boardViewModel.getBoard().listen(this::draw);
         editorViewModel.getCursorPosition().listen(
                 cellPosition -> draw(boardViewModel.getBoard().get()));
@@ -44,12 +48,12 @@ public class SimulationCanvas extends Pane {
 
     private void handleCursorMoved(MouseEvent mouseEvent) {
         CellPosition cursorPosition = getPointSimCoords(mouseEvent);
-        this.editorViewModel.getCursorPosition().set(cursorPosition);
+        eventBus.emit(new BoardEvent(BoardEvent.Type.MOVED, cursorPosition));
     }
 
     private void handleDraw(MouseEvent mouseEvent) {
         CellPosition simCoord = getPointSimCoords(mouseEvent);
-        this.editorViewModel.boardPressed(simCoord);
+        eventBus.emit(new BoardEvent(BoardEvent.Type.PRESSED, simCoord));
     }
 
     private CellPosition getPointSimCoords(MouseEvent mouseEvent) {
