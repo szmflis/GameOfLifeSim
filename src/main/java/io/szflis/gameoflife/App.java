@@ -1,9 +1,14 @@
 package io.szflis.gameoflife;
 
+import io.szflis.gameoflife.logic.*;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
+import io.szflis.gameoflife.logic.Simulator;
 import io.szflis.gameoflife.util.event.EventBus;
+import io.szflis.gameoflife.view.InfoBar;
+import io.szflis.gameoflife.view.MainView;
 import io.szflis.gameoflife.view.SimulationCanvas;
+import io.szflis.gameoflife.view.Toolbar;
 import io.szflis.gameoflife.viewmodel.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,24 +21,46 @@ public class App extends Application {
         EventBus eventBus = new EventBus();
         Board board = new BoundedBoard(20,13);
 
-        ApplicationViewModel applicationViewModel = new ApplicationViewModel();
+        ApplicationStateManager applicationStateManager = new ApplicationStateManager();
         BoardViewModel boardViewModel = new BoardViewModel();
 
-        EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, board);
-        eventBus.listenFor(DrawModeEvent.class, editorViewModel::handle);
-        eventBus.listenFor(BoardEvent.class, editorViewModel::handle);
+        Editor editor = new Editor(board);
+        eventBus.listenFor(DrawModeEvent.class, editor::handle);
+        eventBus.listenFor(BoardEvent.class, editor::handle);
 
-        SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel, applicationViewModel, editorViewModel);
-        eventBus.listenFor(SimulatorEvent.class, simulationViewModel::handle);
+        editor.getCursorPosition().listen(cursorPosition -> {
+            // every time cursor position changes in the editor do this
+            // one-way bind
+            boardViewModel.getCursorPosition().set(cursorPosition);
+        });
 
-        applicationViewModel.getApplicationState().listen(editorViewModel::onAppStateChanged);
+        Simulator simulator = new Simulator(applicationStateManager);
+        eventBus.listenFor(SimulatorEvent.class, simulator::handle);
+
+        editor.getBoard().listen(editorBoard -> {
+            simulator.getInitialBoard().set(editorBoard);
+            boardViewModel.getBoard().set(editorBoard);
+        });
+
+        simulator.getCurrentBoard().listen(simulationBoard -> {
+            boardViewModel.getBoard().set(simulationBoard);
+        });
+
+        applicationStateManager.getApplicationState().listen(editor::onAppStateChanged);
         boardViewModel.getBoard().set(board);
 
-        SimulationCanvas simulationCanvas = new SimulationCanvas(editorViewModel, boardViewModel, eventBus);
+        SimulationCanvas simulationCanvas = new SimulationCanvas(boardViewModel, eventBus);
         Toolbar toolbar = new Toolbar(eventBus);
-        InfoBar infoBar = new InfoBar(editorViewModel);
+        InfoBarViewModel infoBarViewModel = new InfoBarViewModel();
+        editor.getCursorPosition().listen(cursorPosition -> {
+            infoBarViewModel.getCursorPosition().set(cursorPosition);
+        });
+        editor.getDrawMode().listen(drawMode -> {
+            infoBarViewModel.getCurrentDrawMode().set(drawMode);
+        });
+        InfoBar infoBar = new InfoBar(infoBarViewModel);
 
-        MainView mainView = new MainView(editorViewModel);
+        MainView mainView = new MainView(eventBus);
         mainView.setTop(toolbar);
         mainView.setCenter(simulationCanvas);
         mainView.setBottom(infoBar);

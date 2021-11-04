@@ -1,22 +1,20 @@
-package io.szflis.gameoflife.viewmodel;
+package io.szflis.gameoflife.logic;
 
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.gameoflife.util.Property;
 
-public class EditorViewModel {
+public class Editor {
 
     private Property<CellState> drawMode = new Property<>(CellState.ALIVE);
     private Property<CellPosition> cursorPosition = new Property<>();
+    private Property<Board> editingBoard = new Property<>();
 
-    private BoardViewModel boardViewModel;
-    private Board editingBoard;
     private boolean drawingEnabled = true;
 
-    public EditorViewModel(BoardViewModel boardViewModel, Board initialEditingBoard) {
-        this.boardViewModel = boardViewModel;
-        this.editingBoard = initialEditingBoard;
+    public Editor(Board initialEditingBoard) {
+        this.editingBoard.set(initialEditingBoard);
     }
 
     public void handle(DrawModeEvent drawModeEvent) {
@@ -38,7 +36,7 @@ public class EditorViewModel {
         System.out.println("EditorViewModel got a ping about ppp state change to: " + state);
         if (state == ApplicationState.EDITING) {
             drawingEnabled = true;
-            this.boardViewModel.getBoard().set(editingBoard);
+            this.editingBoard.set(this.editingBoard.get());
         } else {
             drawingEnabled = false;
         }
@@ -47,8 +45,9 @@ public class EditorViewModel {
     private void boardPressed(CellPosition cellPosition) {
         this.cursorPosition.set(cellPosition);
         if (drawingEnabled) {
-            this.editingBoard.setState(cellPosition.getX(), cellPosition.getY(), drawMode.get());
-            this.boardViewModel.getBoard().set(this.editingBoard);
+            Board board = this.editingBoard.get();
+            board.setState(cellPosition.getX(), cellPosition.getY(), drawMode.get());
+            this.editingBoard.set(board);
         }
     }
 
@@ -60,7 +59,7 @@ public class EditorViewModel {
         return cursorPosition;
     }
 
-    public Board getBoard() {
+    public Property<Board> getBoard() {
         return this.editingBoard;
     }
 }

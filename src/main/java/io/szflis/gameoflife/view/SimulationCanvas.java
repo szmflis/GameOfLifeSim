@@ -1,12 +1,11 @@
 package io.szflis.gameoflife.view;
 
+import io.szflis.gameoflife.logic.BoardEvent;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.gameoflife.util.event.EventBus;
-import io.szflis.gameoflife.viewmodel.BoardEvent;
 import io.szflis.gameoflife.viewmodel.BoardViewModel;
-import io.szflis.gameoflife.viewmodel.EditorViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,17 +19,14 @@ public class SimulationCanvas extends Pane {
 
     private final Canvas canvas;
     private Affine affine;
-    private EditorViewModel editorViewModel;
     private BoardViewModel boardViewModel;
     private EventBus eventBus;
 
-    public SimulationCanvas(EditorViewModel editorViewModel, BoardViewModel boardViewModel, EventBus eventBus) {
-        this.editorViewModel = editorViewModel;
+    public SimulationCanvas(BoardViewModel boardViewModel, EventBus eventBus) {
         this.boardViewModel = boardViewModel;
         this.eventBus = eventBus;
         boardViewModel.getBoard().listen(this::draw);
-        editorViewModel.getCursorPosition().listen(
-                cellPosition -> draw(boardViewModel.getBoard().get()));
+        boardViewModel.getCursorPosition().listen(cellPosition -> draw(boardViewModel.getBoard().get()));
 
         this.canvas = new Canvas(400, 400);
         this.canvas.setOnMousePressed(this::handleDraw);
@@ -79,8 +75,8 @@ public class SimulationCanvas extends Pane {
 
         this.drawSimulation(board);
 
-        CellPosition cursorPosition = editorViewModel.getCursorPosition().get();
-        if (editorViewModel.getCursorPosition().isPresent()) {
+        if (boardViewModel.getCursorPosition().isPresent()) {
+            CellPosition cursorPosition = boardViewModel.getCursorPosition().get();
             gc.setFill(new Color(0.3, 0.3, 0.3, 0.5));
             gc.fillRect(cursorPosition.getX(), cursorPosition.getY(), 1, 1);
         }

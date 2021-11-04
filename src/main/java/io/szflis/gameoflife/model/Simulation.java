@@ -1,8 +1,4 @@
-package io.szflis.gameoflife;
-
-import io.szflis.gameoflife.model.Board;
-import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.model.SimulationRule;
+package io.szflis.gameoflife.model;
 
 public class Simulation {
 

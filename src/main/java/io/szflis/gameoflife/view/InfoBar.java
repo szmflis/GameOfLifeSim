@@ -1,7 +1,8 @@
-package io.szflis.gameoflife;
+package io.szflis.gameoflife.view;
 
+import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.viewmodel.EditorViewModel;
+import io.szflis.gameoflife.viewmodel.InfoBarViewModel;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -15,8 +16,10 @@ public class InfoBar extends HBox {
     private Label cursor;
     private Label editingTool;
 
-    public InfoBar(EditorViewModel editorViewModel) {
-        editorViewModel.getDrawMode().listen(this::setDrawMode);
+    public InfoBar(InfoBarViewModel infoBarViewModel) {
+        infoBarViewModel.getCurrentDrawMode().listen(this::setDrawMode);
+        infoBarViewModel.getCursorPosition().listen(this::setCursorPos);
+
         this.cursor = new Label();
         this.editingTool = new Label();
 
@@ -24,8 +27,6 @@ public class InfoBar extends HBox {
         spacer.setMinSize(0,0);
         spacer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        this.setCursorPos(0,0);
 
         this.getChildren().addAll(editingTool, spacer, cursor);
     }
@@ -40,7 +41,7 @@ public class InfoBar extends HBox {
         this.editingTool.setText(String.format(drawModeFormat, drawModeString));
     }
 
-    public void setCursorPos(int x, int y) {
-        this.cursor.setText(String.format(cursorPosFormat, x, y));
+    public void setCursorPos(CellPosition cellPosition) {
+        this.cursor.setText(String.format(cursorPosFormat, cellPosition.getX(), cellPosition.getY()));
     }
 }

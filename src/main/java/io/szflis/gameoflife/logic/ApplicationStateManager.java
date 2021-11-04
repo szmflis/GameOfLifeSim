@@ -1,12 +1,12 @@
-package io.szflis.gameoflife.viewmodel;
+package io.szflis.gameoflife.logic;
 
 import io.szflis.gameoflife.util.Property;
 
-public class ApplicationViewModel {
+public class ApplicationStateManager {
 
     private Property<ApplicationState> applicationState = new Property<>(ApplicationState.EDITING);
 
-    public ApplicationViewModel() {
+    public ApplicationStateManager() {
     }
 
     public Property<ApplicationState> getApplicationState() {

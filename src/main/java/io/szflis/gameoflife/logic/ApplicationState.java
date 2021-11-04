@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.viewmodel;
+package io.szflis.gameoflife.logic;
 
 public enum ApplicationState {
     SIMULATING,

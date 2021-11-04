@@ -1,8 +1,9 @@
-package io.szflis.gameoflife;
+package io.szflis.gameoflife.view;
 
+import io.szflis.gameoflife.logic.DrawModeEvent;
+import io.szflis.gameoflife.logic.SimulatorEvent;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.gameoflife.util.event.EventBus;
-import io.szflis.gameoflife.viewmodel.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;

@@ -1,7 +1,5 @@
 package io.szflis.gameoflife.util;
 
-import io.szflis.gameoflife.viewmodel.SimpleChangeListener;
-
 import java.util.LinkedList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.viewmodel;
+package io.szflis.gameoflife.util;
 
 public interface SimpleChangeListener<V> {
     void valueChanged(V value);
