@@ -4,6 +4,7 @@ import io.szflis.gameoflife.logic.*;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
 import io.szflis.gameoflife.logic.Simulator;
+import io.szflis.gameoflife.state.EditorState;
 import io.szflis.gameoflife.util.event.EventBus;
 import io.szflis.gameoflife.view.InfoBar;
 import io.szflis.gameoflife.view.MainView;
@@ -24,11 +25,12 @@ public class App extends Application {
         ApplicationStateManager applicationStateManager = new ApplicationStateManager();
         BoardViewModel boardViewModel = new BoardViewModel();
 
-        Editor editor = new Editor(board);
+        EditorState editorState = new EditorState(board);
+        Editor editor = new Editor(editorState);
         eventBus.listenFor(DrawModeEvent.class, editor::handle);
         eventBus.listenFor(BoardEvent.class, editor::handle);
 
-        editor.getCursorPosition().listen(cursorPosition -> {
+        editorState.getCursorPosition().listen(cursorPosition -> {
             // every time cursor position changes in the editor do this
             // one-way bind
             boardViewModel.getCursorPosition().set(cursorPosition);
@@ -37,7 +39,7 @@ public class App extends Application {
         Simulator simulator = new Simulator(applicationStateManager);
         eventBus.listenFor(SimulatorEvent.class, simulator::handle);
 
-        editor.getBoard().listen(editorBoard -> {
+        editorState.getEditingBoard().listen(editorBoard -> {
             simulator.getInitialBoard().set(editorBoard);
             boardViewModel.getBoard().set(editorBoard);
         });
@@ -47,17 +49,25 @@ public class App extends Application {
         });
 
         applicationStateManager.getApplicationState().listen(editor::onAppStateChanged);
+        applicationStateManager.getApplicationState().listen(newState -> {
+            if (newState == ApplicationState.EDITING) {
+                boardViewModel.getBoard().set(editorState.getEditingBoard().get());
+            }
+        });
         boardViewModel.getBoard().set(board);
 
         SimulationCanvas simulationCanvas = new SimulationCanvas(boardViewModel, eventBus);
         Toolbar toolbar = new Toolbar(eventBus);
         InfoBarViewModel infoBarViewModel = new InfoBarViewModel();
-        editor.getCursorPosition().listen(cursorPosition -> {
+
+        editorState.getCursorPosition().listen(cursorPosition -> {
             infoBarViewModel.getCursorPosition().set(cursorPosition);
         });
-        editor.getDrawMode().listen(drawMode -> {
+
+        editorState.getDrawMode().listen(drawMode -> {
             infoBarViewModel.getCurrentDrawMode().set(drawMode);
         });
+
         InfoBar infoBar = new InfoBar(infoBarViewModel);
 
         MainView mainView = new MainView(eventBus);
