@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.logic;
+package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.util.event.Event;

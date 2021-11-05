@@ -1,10 +1,15 @@
 package io.szflis.gameoflife;
 
 import io.szflis.gameoflife.logic.*;
+import io.szflis.gameoflife.logic.editor.BoardEvent;
+import io.szflis.gameoflife.logic.editor.DrawModeEvent;
+import io.szflis.gameoflife.logic.editor.Editor;
+import io.szflis.gameoflife.logic.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
-import io.szflis.gameoflife.logic.Simulator;
+import io.szflis.gameoflife.logic.simulator.Simulator;
 import io.szflis.gameoflife.state.EditorState;
+import io.szflis.gameoflife.state.SimulatorState;
 import io.szflis.gameoflife.util.event.EventBus;
 import io.szflis.gameoflife.view.InfoBar;
 import io.szflis.gameoflife.view.MainView;
@@ -36,21 +41,23 @@ public class App extends Application {
             boardViewModel.getCursorPosition().set(cursorPosition);
         });
 
-        Simulator simulator = new Simulator(applicationStateManager);
+        SimulatorState simulatorState = new SimulatorState(board);
+        Simulator simulator = new Simulator(applicationStateManager, simulatorState);
         eventBus.listenFor(SimulatorEvent.class, simulator::handle);
 
         editorState.getEditingBoard().listen(editorBoard -> {
-            simulator.getInitialBoard().set(editorBoard);
+            simulatorState.getBoard().set(editorBoard);
             boardViewModel.getBoard().set(editorBoard);
         });
 
-        simulator.getCurrentBoard().listen(simulationBoard -> {
+        simulatorState.getBoard().listen(simulationBoard -> {
             boardViewModel.getBoard().set(simulationBoard);
         });
 
         applicationStateManager.getApplicationState().listen(editor::onAppStateChanged);
         applicationStateManager.getApplicationState().listen(newState -> {
             if (newState == ApplicationState.EDITING) {
+                simulatorState.getBoard().set(editorState.getEditingBoard().get());
                 boardViewModel.getBoard().set(editorState.getEditingBoard().get());
             }
         });

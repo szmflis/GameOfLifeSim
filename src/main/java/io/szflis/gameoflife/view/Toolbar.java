@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.view;
 
-import io.szflis.gameoflife.logic.DrawModeEvent;
-import io.szflis.gameoflife.logic.SimulatorEvent;
+import io.szflis.gameoflife.logic.editor.DrawModeEvent;
+import io.szflis.gameoflife.logic.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.gameoflife.util.event.EventBus;
 import javafx.event.ActionEvent;

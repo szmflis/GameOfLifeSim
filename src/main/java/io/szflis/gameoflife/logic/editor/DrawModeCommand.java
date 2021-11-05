@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.logic;
+package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.gameoflife.state.EditorState;

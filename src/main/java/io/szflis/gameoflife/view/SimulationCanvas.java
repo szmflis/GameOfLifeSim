@@ -1,6 +1,6 @@
 package io.szflis.gameoflife.view;
 
-import io.szflis.gameoflife.logic.BoardEvent;
+import io.szflis.gameoflife.logic.editor.BoardEvent;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;

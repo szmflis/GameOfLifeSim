@@ -6,4 +6,6 @@ module org.example {
     exports io.szflis.gameoflife.util;
     exports io.szflis.gameoflife.view;
     exports io.szflis.gameoflife.logic;
+    exports io.szflis.gameoflife.logic.editor;
+    exports io.szflis.gameoflife.logic.simulator;
 }

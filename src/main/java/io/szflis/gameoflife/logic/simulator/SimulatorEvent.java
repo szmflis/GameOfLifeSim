@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.logic;
+package io.szflis.gameoflife.logic.simulator;
 
 import io.szflis.gameoflife.util.event.Event;
 

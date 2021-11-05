@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.logic;
+package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.command.Command;
 import io.szflis.gameoflife.state.EditorState;
