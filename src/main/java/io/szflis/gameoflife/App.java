@@ -1,5 +1,6 @@
 package io.szflis.gameoflife;
 
+import io.szflis.gameoflife.command.CommandExecutor;
 import io.szflis.gameoflife.logic.*;
 import io.szflis.gameoflife.logic.editor.BoardEvent;
 import io.szflis.gameoflife.logic.editor.DrawModeEvent;
@@ -10,6 +11,7 @@ import io.szflis.gameoflife.model.BoundedBoard;
 import io.szflis.gameoflife.logic.simulator.Simulator;
 import io.szflis.gameoflife.state.EditorState;
 import io.szflis.gameoflife.state.SimulatorState;
+import io.szflis.gameoflife.state.StateRegistry;
 import io.szflis.gameoflife.util.event.EventBus;
 import io.szflis.gameoflife.view.InfoBar;
 import io.szflis.gameoflife.view.MainView;
@@ -25,13 +27,17 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         EventBus eventBus = new EventBus();
+        StateRegistry stateRegistry = new StateRegistry();
+        CommandExecutor commandExecutor = new CommandExecutor(stateRegistry);
         Board board = new BoundedBoard(20,13);
 
         ApplicationStateManager applicationStateManager = new ApplicationStateManager();
         BoardViewModel boardViewModel = new BoardViewModel();
 
         EditorState editorState = new EditorState(board);
-        Editor editor = new Editor(editorState);
+        stateRegistry.registerState(EditorState.class, editorState);
+
+        Editor editor = new Editor(editorState, commandExecutor);
         eventBus.listenFor(DrawModeEvent.class, editor::handle);
         eventBus.listenFor(BoardEvent.class, editor::handle);
 
@@ -42,7 +48,8 @@ public class App extends Application {
         });
 
         SimulatorState simulatorState = new SimulatorState(board);
-        Simulator simulator = new Simulator(applicationStateManager, simulatorState);
+        stateRegistry.registerState(SimulatorState.class, simulatorState);
+        Simulator simulator = new Simulator(applicationStateManager, simulatorState, commandExecutor);
         eventBus.listenFor(SimulatorEvent.class, simulator::handle);
 
         editorState.getEditingBoard().listen(editorBoard -> {

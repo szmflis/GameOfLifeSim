@@ -6,4 +6,9 @@ import io.szflis.gameoflife.state.EditorState;
 public interface EditorCommand extends Command<EditorState> {
     @Override
     void execute(EditorState editorState);
+
+    @Override
+    default Class<EditorState> getStateClass() {
+        return EditorState.class;
+    }
 }

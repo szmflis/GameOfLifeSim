@@ -1,5 +1,6 @@
 package io.szflis.gameoflife.logic.simulator;
 
+import io.szflis.gameoflife.command.CommandExecutor;
 import io.szflis.gameoflife.logic.ApplicationState;
 import io.szflis.gameoflife.logic.ApplicationStateManager;
 import io.szflis.gameoflife.model.Simulation;
@@ -15,12 +16,14 @@ public class Simulator {
     private Simulation simulation;
     private ApplicationStateManager applicationStateManager;
     private SimulatorState state;
+    private CommandExecutor commandExecutor;
     // only simulator cares about it, never persisted, so not in state
     private boolean reset = true;
 
-    public Simulator(ApplicationStateManager applicationStateManager, SimulatorState state) {
+    public Simulator(ApplicationStateManager applicationStateManager, SimulatorState state, CommandExecutor commandExecutor) {
         this.applicationStateManager = applicationStateManager;
         this.state = state;
+        this.commandExecutor = commandExecutor;
         this.timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> doStep()));
         this.timeline.setCycleCount(Timeline.INDEFINITE);
     }
@@ -51,10 +54,8 @@ public class Simulator {
 
         this.simulation.step();
 
-        SimulatorCommand command = (state) -> {
-            state.getBoard().set(simulation.getBoard());
-        };
-        command.execute(state);
+        SetBoardCommand command = new SetBoardCommand(simulation);
+        commandExecutor.execute(command);
     }
 
     private void reset() {

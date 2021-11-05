@@ -1,5 +1,6 @@
 package io.szflis.gameoflife.logic.editor;
 
+import io.szflis.gameoflife.command.CommandExecutor;
 import io.szflis.gameoflife.logic.ApplicationState;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.state.EditorState;
@@ -7,16 +8,18 @@ import io.szflis.gameoflife.state.EditorState;
 public class Editor {
 
     private EditorState state;
+    CommandExecutor commandExecutor;
 
     private boolean drawingEnabled = true;
 
-    public Editor(EditorState state) {
+    public Editor(EditorState state, CommandExecutor commandExecutor) {
         this.state = state;
+        this.commandExecutor = commandExecutor;
     }
 
     public void handle(DrawModeEvent drawModeEvent) {
         DrawModeCommand command = new DrawModeCommand(drawModeEvent.getDrawMode());
-        command.execute(state);
+        commandExecutor.execute(command);
     }
 
     public void handle(BoardEvent boardEvent) {
@@ -42,14 +45,12 @@ public class Editor {
         cursorPositionChanged(cursorPosition);
         if (drawingEnabled) {
             BoardEditCommand command = new BoardEditCommand(cursorPosition, state.getDrawMode().get());
-            command.execute(this.state);
+            commandExecutor.execute(command);
         }
     }
 
     private void cursorPositionChanged(CellPosition cursorPosition) {
-        EditorCommand command = (state) -> {
-            state.getCursorPosition().set(cursorPosition);
-        };
-        command.execute(this.state);
+        CursorPositionCommand command = new CursorPositionCommand(cursorPosition);
+        commandExecutor.execute(command);
     }
 }
