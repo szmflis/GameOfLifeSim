@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.util.event.Event;
+import io.szflis.app.event.Event;
 
 public class DrawModeEvent implements Event {
 

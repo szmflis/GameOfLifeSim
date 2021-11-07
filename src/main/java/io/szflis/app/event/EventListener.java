@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.util.event;
+package io.szflis.app.event;
 
 public interface EventListener<T extends Event> {
 

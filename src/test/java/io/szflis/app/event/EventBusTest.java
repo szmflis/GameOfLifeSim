@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.util.event;
+package io.szflis.app.event;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

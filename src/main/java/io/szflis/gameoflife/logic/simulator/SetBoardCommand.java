@@ -1,7 +1,6 @@
 package io.szflis.gameoflife.logic.simulator;
 
 import io.szflis.gameoflife.model.Simulation;
-import io.szflis.gameoflife.state.SimulatorState;
 
 public class SetBoardCommand implements SimulatorCommand {
 

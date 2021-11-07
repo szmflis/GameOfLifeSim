@@ -1,9 +1,8 @@
 package io.szflis.gameoflife.logic.editor;
 
-import io.szflis.gameoflife.command.CommandExecutor;
-import io.szflis.gameoflife.logic.ApplicationState;
+import io.szflis.app.command.CommandExecutor;
+import io.szflis.gameoflife.logic.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellPosition;
-import io.szflis.gameoflife.state.EditorState;
 
 public class Editor {
 
@@ -33,10 +32,11 @@ public class Editor {
         }
     }
 
-    public void onAppStateChanged(ApplicationState state) {
-        if (state == ApplicationState.EDITING) {
+    public void handleSimulatorEvent(SimulatorEvent event) {
+        if (event.getEventType() == SimulatorEvent.Type.RESET) {
             drawingEnabled = true;
-        } else {
+        } else if (event.getEventType() == SimulatorEvent.Type.START
+                || event.getEventType() == SimulatorEvent.Type.STEP){
             drawingEnabled = false;
         }
     }

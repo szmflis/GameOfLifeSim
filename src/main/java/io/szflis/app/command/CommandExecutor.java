@@ -1,6 +1,6 @@
-package io.szflis.gameoflife.command;
+package io.szflis.app.command;
 
-import io.szflis.gameoflife.state.StateRegistry;
+import io.szflis.app.state.StateRegistry;
 
 public class CommandExecutor {
 

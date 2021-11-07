@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.state;
+package io.szflis.app.state;
 
 import java.util.HashMap;
 import java.util.Map;

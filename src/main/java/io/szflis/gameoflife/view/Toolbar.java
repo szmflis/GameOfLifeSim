@@ -3,7 +3,7 @@ package io.szflis.gameoflife.view;
 import io.szflis.gameoflife.logic.editor.DrawModeEvent;
 import io.szflis.gameoflife.logic.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.util.event.EventBus;
+import io.szflis.app.event.EventBus;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;

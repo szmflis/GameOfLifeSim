@@ -1,11 +1,8 @@
 package io.szflis.gameoflife.logic.simulator;
 
-import io.szflis.gameoflife.command.CommandExecutor;
-import io.szflis.gameoflife.logic.ApplicationState;
-import io.szflis.gameoflife.logic.ApplicationStateManager;
+import io.szflis.app.command.CommandExecutor;
 import io.szflis.gameoflife.model.Simulation;
 import io.szflis.gameoflife.model.StandardRule;
-import io.szflis.gameoflife.state.SimulatorState;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -14,14 +11,12 @@ public class Simulator {
 
     private Timeline timeline;
     private Simulation simulation;
-    private ApplicationStateManager applicationStateManager;
     private SimulatorState state;
     private CommandExecutor commandExecutor;
     // only simulator cares about it, never persisted, so not in state
     private boolean reset = true;
 
-    public Simulator(ApplicationStateManager applicationStateManager, SimulatorState state, CommandExecutor commandExecutor) {
-        this.applicationStateManager = applicationStateManager;
+    public Simulator(SimulatorState state, CommandExecutor commandExecutor) {
         this.state = state;
         this.commandExecutor = commandExecutor;
         this.timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> doStep()));
@@ -49,7 +44,7 @@ public class Simulator {
         if (reset) {
             reset = false;
             this.simulation = new Simulation(this.state.getBoard().get(), new StandardRule());
-            applicationStateManager.getApplicationState().set(ApplicationState.SIMULATING);
+            this.state.getSimulating().set(true);
         }
 
         this.simulation.step();
@@ -60,7 +55,7 @@ public class Simulator {
 
     private void reset() {
         reset = true;
-        this.applicationStateManager.getApplicationState().set(ApplicationState.EDITING);
+        this.state.getSimulating().set(false);
     }
 
     private void start() {

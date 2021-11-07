@@ -1,9 +1,9 @@
-package io.szflis.gameoflife.state;
+package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.util.Property;
+import io.szflis.app.observable.Property;
 
 public class EditorState {
     private Property<CellState> drawMode = new Property<>(CellState.ALIVE);

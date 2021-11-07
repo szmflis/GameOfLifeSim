@@ -1,6 +1,6 @@
 package io.szflis.gameoflife.logic.simulator;
 
-import io.szflis.gameoflife.util.event.Event;
+import io.szflis.app.event.Event;
 
 public class SimulatorEvent implements Event {
 

@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.command;
+package io.szflis.app.command;
 
 public interface Command<T> {
 

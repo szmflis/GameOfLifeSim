@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.logic.editor;
 
 import io.szflis.gameoflife.model.CellPosition;
-import io.szflis.gameoflife.util.event.Event;
+import io.szflis.app.event.Event;
 
 public class BoardEvent implements Event {
 

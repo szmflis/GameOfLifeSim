@@ -1,10 +1,11 @@
-package io.szflis.gameoflife.state;
+package io.szflis.gameoflife.logic.simulator;
 
 import io.szflis.gameoflife.model.Board;
-import io.szflis.gameoflife.util.Property;
+import io.szflis.app.observable.Property;
 
 public class SimulatorState {
 
+    private Property<Boolean> simulating = new Property<>(false);
     private Property<Board> board = new Property<>();
 
     public SimulatorState(Board board) {
@@ -13,5 +14,9 @@ public class SimulatorState {
 
     public Property<Board> getBoard() {
         return board;
+    }
+
+    public Property<Boolean> getSimulating() {
+        return simulating;
     }
 }

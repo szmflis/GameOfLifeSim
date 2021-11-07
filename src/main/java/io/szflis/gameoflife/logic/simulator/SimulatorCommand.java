@@ -1,7 +1,6 @@
 package io.szflis.gameoflife.logic.simulator;
 
-import io.szflis.gameoflife.command.Command;
-import io.szflis.gameoflife.state.SimulatorState;
+import io.szflis.app.command.Command;
 
 public interface SimulatorCommand extends Command<SimulatorState> {
     @Override

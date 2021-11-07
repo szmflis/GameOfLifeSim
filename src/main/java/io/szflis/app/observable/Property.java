@@ -1,4 +1,6 @@
-package io.szflis.gameoflife.util;
+package io.szflis.app.observable;
+
+import io.szflis.gameoflife.model.BoundedBoard;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +31,6 @@ public class Property<T> {
 
     private void notifyListeners() {
         for (SimpleChangeListener<T> listener : listeners) {
-            System.out.println("Informing listener about change");
             listener.valueChanged(this.value);
         }
     }

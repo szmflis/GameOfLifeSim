@@ -2,7 +2,7 @@ package io.szflis.gameoflife.viewmodel;
 
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.util.Property;
+import io.szflis.app.observable.Property;
 
 public class InfoBarViewModel {
 

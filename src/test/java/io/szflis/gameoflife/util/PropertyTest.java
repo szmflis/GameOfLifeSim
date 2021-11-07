@@ -1,5 +1,7 @@
 package io.szflis.gameoflife.util;
 
+import io.szflis.app.observable.Property;
+import io.szflis.app.observable.SimpleChangeListener;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

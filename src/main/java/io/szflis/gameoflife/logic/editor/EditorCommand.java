@@ -1,7 +1,6 @@
 package io.szflis.gameoflife.logic.editor;
 
-import io.szflis.gameoflife.command.Command;
-import io.szflis.gameoflife.state.EditorState;
+import io.szflis.app.command.Command;
 
 public interface EditorCommand extends Command<EditorState> {
     @Override
