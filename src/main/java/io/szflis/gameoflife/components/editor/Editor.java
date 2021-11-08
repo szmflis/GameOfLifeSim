@@ -3,6 +3,7 @@ package io.szflis.gameoflife.components.editor;
 import io.szflis.app.command.CommandExecutor;
 import io.szflis.gameoflife.components.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellPosition;
+import io.szflis.gameoflife.model.CellState;
 
 public class Editor {
 
@@ -22,14 +23,34 @@ public class Editor {
     }
 
     public void handle(BoardEvent boardEvent) {
+        cursorPositionChanged(boardEvent.getCursorPosition());
         switch (boardEvent.getEventType()) {
             case PRESSED:
-                boardPressed(boardEvent.getCursorPosition());
+                beginEdit();
+                handleEdit(boardEvent.getCursorPosition());
                 break;
             case MOVED:
-                cursorPositionChanged(boardEvent.getCursorPosition());
+                if (state.getEditInProgress().get()) {
+                    handleEdit(boardEvent.getCursorPosition());
+                }
+                break;
+            case RELEASED:
+                handleEdit(boardEvent.getCursorPosition());
+                endEdit();
                 break;
         }
+    }
+
+    private void beginEdit() {
+        state.getEditInProgress().set(true);
+        state.getCurrentEdit().set(new Edit());
+    }
+
+    private void endEdit() {
+        BoardEditCommand boardEditCommand = new BoardEditCommand(state.getCurrentEdit().get());
+        commandExecutor.execute(boardEditCommand);
+        state.getEditInProgress().set(false);
+        state.getCurrentEdit().set(null);
     }
 
     public void handleSimulatorEvent(SimulatorEvent event) {
@@ -41,11 +62,15 @@ public class Editor {
         }
     }
 
-    private void boardPressed(CellPosition cursorPosition) {
+    private void handleEdit(CellPosition cursorPosition) {
         cursorPositionChanged(cursorPosition);
         if (drawingEnabled) {
-            BoardEditCommand command = new BoardEditCommand(cursorPosition, state.getDrawMode().get());
-            commandExecutor.execute(command);
+            CellState currentState = this.state
+                    .getEditingBoard().get().getState(cursorPosition.getX(), cursorPosition.getY());
+            CellState newState = this.state.getDrawMode().get();
+
+            Change change = new Change(cursorPosition, newState, currentState);
+            state.getCurrentEdit().get().add(change);
         }
     }
 

@@ -9,6 +9,8 @@ public class EditorState {
     private Property<CellState> drawMode = new Property<>(CellState.ALIVE);
     private Property<CellPosition> cursorPosition = new Property<>();
     private Property<Board> editingBoard = new Property<>();
+    private Property<Boolean> editInProgress = new Property<>(false);
+    private Property<Edit> currentEdit = new Property<>();
 
     public EditorState(Board editingBoard) {
         this.editingBoard.set(editingBoard);
@@ -24,5 +26,13 @@ public class EditorState {
 
     public Property<Board> getEditingBoard() {
         return editingBoard;
+    }
+
+    public Property<Boolean> getEditInProgress() {
+        return editInProgress;
+    }
+
+    public Property<Edit> getCurrentEdit() {
+        return currentEdit;
     }
 }

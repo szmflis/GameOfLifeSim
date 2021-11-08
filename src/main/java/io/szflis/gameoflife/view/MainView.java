@@ -1,5 +1,6 @@
 package io.szflis.gameoflife.view;
 
+import io.szflis.app.command.CommandExecutor;
 import io.szflis.gameoflife.components.editor.DrawModeEvent;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.app.event.EventBus;
@@ -12,9 +13,10 @@ public class MainView extends BorderPane {
     private EventBus eventBus;
 
     private SimulationCanvas canvas;
+    private CommandExecutor commandExecutor;
 
-
-    public MainView(EventBus eventBus) {
+    public MainView(EventBus eventBus, CommandExecutor commandExecutor) {
+        this.commandExecutor = commandExecutor;
         this.eventBus = eventBus;
 
         this.canvas = new SimulationCanvas(eventBus);
@@ -35,6 +37,8 @@ public class MainView extends BorderPane {
             this.eventBus.emit(new DrawModeEvent(CellState.ALIVE));
         } else if (keyEvent.getCode() == KeyCode.E) {
             this.eventBus.emit(new DrawModeEvent(CellState.DEAD));
+        } else if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.Z) {
+           commandExecutor.undo();
         }
     }
 

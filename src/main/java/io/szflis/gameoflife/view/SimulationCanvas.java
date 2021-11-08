@@ -27,8 +27,9 @@ public class SimulationCanvas extends Pane {
         this.eventBus = eventBus;
 
         this.canvas = new Canvas(400, 400);
-        this.canvas.setOnMousePressed(this::handleDraw);
-        this.canvas.setOnMouseDragged(this::handleDraw);
+        this.canvas.setOnMousePressed(this::handlePressed);
+        this.canvas.setOnMouseDragged(this::handleCursorMoved);
+        this.canvas.setOnMouseReleased(this::handleReleased);
         this.canvas.setOnMouseMoved(this::handleCursorMoved);
 
         this.canvas.widthProperty().bind(this.widthProperty());
@@ -40,10 +41,9 @@ public class SimulationCanvas extends Pane {
         this.affine.appendScale(400/10f, 400/10f);
     }
 
-    public void addDrawLayer(DrawLayer drawLayer) {
-        drawLayers.add(drawLayer);
-        drawLayers.sort(Comparator.comparingInt(DrawLayer::getLayer));
-        drawLayer.addInvalidationListener(this::draw);
+    private void handlePressed(MouseEvent mouseEvent) {
+        CellPosition simCoord = getPointSimCoords(mouseEvent);
+        eventBus.emit(new BoardEvent(BoardEvent.Type.PRESSED, simCoord));
     }
 
     private void handleCursorMoved(MouseEvent mouseEvent) {
@@ -51,10 +51,17 @@ public class SimulationCanvas extends Pane {
         eventBus.emit(new BoardEvent(BoardEvent.Type.MOVED, cursorPosition));
     }
 
-    private void handleDraw(MouseEvent mouseEvent) {
+    private void handleReleased(MouseEvent mouseEvent) {
         CellPosition simCoord = getPointSimCoords(mouseEvent);
-        eventBus.emit(new BoardEvent(BoardEvent.Type.PRESSED, simCoord));
+        eventBus.emit(new BoardEvent(BoardEvent.Type.RELEASED, simCoord));
     }
+
+    public void addDrawLayer(DrawLayer drawLayer) {
+        drawLayers.add(drawLayer);
+        drawLayers.sort(Comparator.comparingInt(DrawLayer::getLayer));
+        drawLayer.addInvalidationListener(this::draw);
+    }
+
 
     private CellPosition getPointSimCoords(MouseEvent mouseEvent) {
         double mouseX = mouseEvent.getX();
