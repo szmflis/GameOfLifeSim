@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.util;
 
 import io.szflis.app.observable.Property;
-import io.szflis.app.observable.SimpleChangeListener;
+import io.szflis.app.observable.ChangeListener;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +33,7 @@ class PropertyTest {
         assertEquals(expected, listener.value);
     }
 
-    private class DoubleListener implements SimpleChangeListener<Double> {
+    private class DoubleListener implements ChangeListener<Double> {
 
         private boolean notified = false;
         private double value;

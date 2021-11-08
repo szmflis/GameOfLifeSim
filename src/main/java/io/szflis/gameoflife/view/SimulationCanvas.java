@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.view;
 
 import io.szflis.app.event.EventBus;
-import io.szflis.gameoflife.logic.editor.BoardEvent;
+import io.szflis.gameoflife.components.editor.BoardEvent;
 import io.szflis.gameoflife.model.CellPosition;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;

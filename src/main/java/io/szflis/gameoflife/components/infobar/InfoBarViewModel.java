@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.viewmodel;
+package io.szflis.gameoflife.components.infobar;
 
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;

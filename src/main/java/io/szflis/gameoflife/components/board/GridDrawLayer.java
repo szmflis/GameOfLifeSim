@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.logic.board;
+package io.szflis.gameoflife.components.board;
 
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.view.AbstractDrawLayer;

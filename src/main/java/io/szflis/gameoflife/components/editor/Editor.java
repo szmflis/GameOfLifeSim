@@ -1,7 +1,7 @@
-package io.szflis.gameoflife.logic.editor;
+package io.szflis.gameoflife.components.editor;
 
 import io.szflis.app.command.CommandExecutor;
-import io.szflis.gameoflife.logic.simulator.SimulatorEvent;
+import io.szflis.gameoflife.components.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellPosition;
 
 public class Editor {

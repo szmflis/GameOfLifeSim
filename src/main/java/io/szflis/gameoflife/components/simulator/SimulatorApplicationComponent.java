@@ -1,11 +1,11 @@
-package io.szflis.gameoflife.logic.simulator;
+package io.szflis.gameoflife.components.simulator;
 
 import io.szflis.gameoflife.ApplicationComponent;
 import io.szflis.gameoflife.ApplicationContext;
-import io.szflis.gameoflife.logic.board.BoardState;
+import io.szflis.gameoflife.components.board.BoardState;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
-import io.szflis.gameoflife.logic.editor.EditorState;
+import io.szflis.gameoflife.components.editor.EditorState;
 
 public class SimulatorApplicationComponent implements ApplicationComponent  {
 

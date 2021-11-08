@@ -1,6 +1,6 @@
 package io.szflis.gameoflife.view;
 
-import io.szflis.gameoflife.logic.editor.DrawModeEvent;
+import io.szflis.gameoflife.components.editor.DrawModeEvent;
 import io.szflis.gameoflife.model.CellState;
 import io.szflis.app.event.EventBus;
 import javafx.scene.input.KeyCode;

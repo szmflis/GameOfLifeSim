@@ -1,8 +1,7 @@
-package io.szflis.gameoflife.view;
+package io.szflis.gameoflife.components.infobar;
 
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.CellState;
-import io.szflis.gameoflife.viewmodel.InfoBarViewModel;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;

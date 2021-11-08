@@ -1,5 +1,5 @@
 package io.szflis.app.observable;
 
-public interface SimpleChangeListener<V> {
+public interface ChangeListener<V> {
     void valueChanged(V value);
 }
