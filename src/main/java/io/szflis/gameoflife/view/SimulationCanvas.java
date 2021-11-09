@@ -26,7 +26,7 @@ public class SimulationCanvas extends Pane {
     public SimulationCanvas(EventBus eventBus) {
         this.eventBus = eventBus;
 
-        this.canvas = new Canvas(400, 400);
+        this.canvas = new Canvas();
         this.canvas.setOnMousePressed(this::handlePressed);
         this.canvas.setOnMouseDragged(this::handleCursorMoved);
         this.canvas.setOnMouseReleased(this::handleReleased);

@@ -15,7 +15,9 @@ public class ApplicationContext {
     private int boardWidth;
     private int boardHeight;
 
-    public ApplicationContext(EventBus eventBus, CommandExecutor commandExecutor, StateRegistry stateRegistry, MainView mainView, int boardWidth, int boardHeight) {
+    public ApplicationContext(EventBus eventBus, CommandExecutor commandExecutor,
+                              StateRegistry stateRegistry, MainView mainView,
+                              int boardWidth, int boardHeight) {
         this.eventBus = eventBus;
         this.commandExecutor = commandExecutor;
         this.stateRegistry = stateRegistry;

@@ -26,7 +26,7 @@ public class App extends Application {
         MainView mainView = new MainView(eventBus, commandExecutor);
 
         ApplicationContext applicationContext = new ApplicationContext(
-                eventBus, commandExecutor, stateRegistry, mainView, 20, 12);
+                eventBus, commandExecutor, stateRegistry, mainView, 20, 20);
 
         List<ApplicationComponent> components = new LinkedList<>();
         components.add(new EditorApplicationComponent());
@@ -41,7 +41,7 @@ public class App extends Application {
             component.initComponent(applicationContext);
         }
 
-        Scene scene = new Scene(mainView, 1200, 800);
+        Scene scene = new Scene(mainView, 1920, 1080);
         stage.setScene(scene);
         stage.show();
     }
