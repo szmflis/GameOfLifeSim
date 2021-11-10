@@ -6,6 +6,7 @@ import io.szflis.app.state.StateRegistry;
 import io.szflis.gameoflife.components.board.BoardApplicationComponent;
 import io.szflis.gameoflife.components.editor.EditorApplicationComponent;
 import io.szflis.gameoflife.components.infobar.InfoBarApplicationComponent;
+import io.szflis.gameoflife.components.resizer.CanvasResizerApplicationComponent;
 import io.szflis.gameoflife.components.simulator.SimulatorApplicationComponent;
 import io.szflis.gameoflife.view.MainView;
 import javafx.application.Application;
@@ -33,6 +34,7 @@ public class App extends Application {
         components.add(new SimulatorApplicationComponent());
         components.add(new BoardApplicationComponent());
         components.add(new InfoBarApplicationComponent());
+        components.add(new CanvasResizerApplicationComponent());
 
         for (ApplicationComponent component : components) {
             component.initState(applicationContext);
@@ -44,6 +46,7 @@ public class App extends Application {
         Scene scene = new Scene(mainView, 1920, 1080);
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {

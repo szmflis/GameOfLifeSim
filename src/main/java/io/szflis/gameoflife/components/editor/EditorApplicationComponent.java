@@ -23,6 +23,23 @@ public class EditorApplicationComponent implements ApplicationComponent  {
                 boardState.getBoard().set(editorState.getEditingBoard().get());
             }
         });
+
+//        applicationContext.getEventBus().listenFor(CanvasResizeEvent.class, event -> {
+//            Board currentBoard = boardState.getBoard().get();
+//
+//            if (event.getEventType() == CanvasResizeEvent.Type.INCREASE) {
+//                final int newWidth = currentBoard.getWidth() + 1;
+//                final int newHeight = currentBoard.getHeight() + 1;
+//                boardState.getBoard().set(new BoundedBoard(newWidth, newHeight));
+//                editorState.getEditingBoard().set(new BoundedBoard(newWidth, newHeight));
+//            } else {
+//                final int newWidth = currentBoard.getWidth() - 1;
+//                final int newHeight = currentBoard.getHeight() - 1;
+//                boardState.getBoard().set(new BoundedBoard(newWidth, newHeight));
+//                editorState.getEditingBoard().set(new BoundedBoard(newWidth, newHeight));
+//            }
+//        });
+
         editorState.getEditingBoard().listen(boardState.getBoard()::set);
 
 

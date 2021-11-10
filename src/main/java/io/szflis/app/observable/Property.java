@@ -10,7 +10,6 @@ public class Property<T> {
 
     public Property(T value) {
         this.value = value;
-        System.out.println("Property initialized to value: " + value);
     }
 
     public Property() {
@@ -18,7 +17,6 @@ public class Property<T> {
     }
 
     public void listen(ChangeListener<T> listener) {
-        System.out.println("Adding change listener");
         this.listeners.add(listener);
     }
 

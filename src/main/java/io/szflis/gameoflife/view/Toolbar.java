@@ -1,5 +1,6 @@
 package io.szflis.gameoflife.view;
 
+import io.szflis.gameoflife.components.resizer.CanvasResizeEvent;
 import io.szflis.gameoflife.components.editor.DrawModeEvent;
 import io.szflis.gameoflife.components.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.CellState;
@@ -33,7 +34,13 @@ public class Toolbar extends ToolBar {
         Button stop = new Button("Stop");
         stop.setOnAction(this::handleStop);
 
-        this.getItems().addAll(draw, erase, reset, step, start, stop);
+        Button sizePlus = new Button("Size +");
+        sizePlus.setOnAction(this::handleSizePlus);
+
+        Button sizeMinus = new Button("Size -");
+        sizeMinus.setOnAction(this::handleSizeMinus);
+
+        this.getItems().addAll(draw, erase, reset, step, start, stop, sizePlus, sizeMinus);
     }
 
     private void handleStop(ActionEvent actionEvent) {
@@ -58,5 +65,13 @@ public class Toolbar extends ToolBar {
 
     private void handleDraw(ActionEvent actionEvent) {
         this.eventBus.emit(new DrawModeEvent(CellState.ALIVE));
+    }
+
+    private void handleSizeMinus(ActionEvent actionEvent) {
+        this.eventBus.emit(new CanvasResizeEvent(CanvasResizeEvent.Type.DECREASE, 1));
+    }
+
+    private void handleSizePlus(ActionEvent actionEvent) {
+        this.eventBus.emit(new CanvasResizeEvent(CanvasResizeEvent.Type.INCREASE, 1));
     }
 }

@@ -17,7 +17,6 @@ public class SimulatorApplicationComponent implements ApplicationComponent  {
         EditorState editorState = applicationContext.getStateRegistry().getState(EditorState.class);
         BoardState boardState = applicationContext.getStateRegistry().getState(BoardState.class);
 
-
         Simulator simulator = new Simulator(simulatorState, applicationContext.getCommandExecutor());
         applicationContext.getEventBus().listenFor(SimulatorEvent.class, simulator::handle);
 

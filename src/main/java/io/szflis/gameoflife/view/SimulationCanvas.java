@@ -26,7 +26,7 @@ public class SimulationCanvas extends Pane {
     public SimulationCanvas(EventBus eventBus) {
         this.eventBus = eventBus;
 
-        this.canvas = new Canvas();
+        this.canvas = new Canvas(10,10);
         this.canvas.setOnMousePressed(this::handlePressed);
         this.canvas.setOnMouseDragged(this::handleCursorMoved);
         this.canvas.setOnMouseReleased(this::handleReleased);
@@ -38,7 +38,7 @@ public class SimulationCanvas extends Pane {
         this.getChildren().add(this.canvas);
 
         this.affine = new Affine();
-        this.affine.appendScale(400/10f, 400/10f);
+        this.affine.appendScale(40f, 40f);
     }
 
     private void handlePressed(MouseEvent mouseEvent) {
