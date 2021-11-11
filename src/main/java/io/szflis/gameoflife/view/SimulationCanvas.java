@@ -3,6 +3,8 @@ package io.szflis.gameoflife.view;
 import io.szflis.app.event.EventBus;
 import io.szflis.gameoflife.components.editor.BoardEvent;
 import io.szflis.gameoflife.model.CellPosition;
+import io.szflis.gameoflife.model.drawlayer.AbstractDrawLayer;
+import io.szflis.gameoflife.model.drawlayer.DrawLayersState;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,33 +14,40 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
 public class SimulationCanvas extends Pane {
 
-    private final Canvas canvas;
+    private Canvas canvas;
     private Affine affine;
     private EventBus eventBus;
-    private List<DrawLayer> drawLayers = new LinkedList<>();
+    private DrawLayersState drawLayersState;
 
-    public SimulationCanvas(EventBus eventBus) {
+    private int singleBlockPixelSizeWidth = 30;
+    private int singleBlockPixelSizeHeight = 30;
+    private int canvasWidthInBlocks = 20;
+    private int canvasHeightInBlocks = 20;
+
+    public SimulationCanvas(EventBus eventBus, DrawLayersState drawLayersState) {
         this.eventBus = eventBus;
+        this.drawLayersState = drawLayersState;
 
-        this.canvas = new Canvas(10,10);
+        setupCanvasHandlers();
+        setupCanvasTransforms();
+        initializeDrawLayers();
+
+        this.getChildren().add(this.canvas);
+    }
+
+    private void setupCanvasTransforms() {
+        this.affine = new Affine();
+        this.affine.appendScale(this.singleBlockPixelSizeWidth, this.singleBlockPixelSizeHeight);
+    }
+
+    private void setupCanvasHandlers() {
+        this.canvas = new Canvas(canvasWidthInBlocks*singleBlockPixelSizeWidth, canvasHeightInBlocks*singleBlockPixelSizeHeight);
         this.canvas.setOnMousePressed(this::handlePressed);
         this.canvas.setOnMouseDragged(this::handleCursorMoved);
         this.canvas.setOnMouseReleased(this::handleReleased);
         this.canvas.setOnMouseMoved(this::handleCursorMoved);
-
-        this.canvas.widthProperty().bind(this.widthProperty());
-        this.canvas.heightProperty().bind(this.heightProperty());
-
-        this.getChildren().add(this.canvas);
-
-        this.affine = new Affine();
-        this.affine.appendScale(40f, 40f);
     }
 
     private void handlePressed(MouseEvent mouseEvent) {
@@ -56,10 +65,8 @@ public class SimulationCanvas extends Pane {
         eventBus.emit(new BoardEvent(BoardEvent.Type.RELEASED, simCoord));
     }
 
-    public void addDrawLayer(DrawLayer drawLayer) {
-        drawLayers.add(drawLayer);
-        drawLayers.sort(Comparator.comparingInt(DrawLayer::getLayer));
-        drawLayer.addInvalidationListener(this::draw);
+    private void initializeDrawLayers() {
+        drawLayersState.getDrawLayers().get().forEach(drawLayer -> drawLayer.addInvalidationListener(this::draw));
     }
 
 
@@ -79,9 +86,10 @@ public class SimulationCanvas extends Pane {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setTransform(this.affine);
         gc.setFill(Color.LIGHTGRAY);
-        gc.fillRect(0,0,400,400);
+        gc.fillRect(0,0,20,20);
 
-        for (DrawLayer drawLayer : drawLayers) {
+        for (AbstractDrawLayer drawLayer : drawLayersState.getDrawLayers().get()) {
+            System.out.println("Draw layer: " + drawLayer.toString());
             drawLayer.draw(gc);
         }
     }

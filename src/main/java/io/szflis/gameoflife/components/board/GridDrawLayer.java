@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.components.board;
 
 import io.szflis.gameoflife.model.Board;
-import io.szflis.gameoflife.view.AbstractDrawLayer;
+import io.szflis.gameoflife.model.drawlayer.AbstractDrawLayer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

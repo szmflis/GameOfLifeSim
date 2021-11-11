@@ -6,6 +6,7 @@ import io.szflis.gameoflife.components.board.BoardState;
 import io.szflis.gameoflife.components.simulator.SimulatorEvent;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
+import io.szflis.gameoflife.model.drawlayer.DrawLayersState;
 
 public class EditorApplicationComponent implements ApplicationComponent  {
 
@@ -13,6 +14,7 @@ public class EditorApplicationComponent implements ApplicationComponent  {
     public void initComponent(ApplicationContext applicationContext) {
         EditorState editorState = applicationContext.getStateRegistry().getState(EditorState.class);
         BoardState boardState = applicationContext.getStateRegistry().getState(BoardState.class);
+        DrawLayersState drawLayersState = applicationContext.getStateRegistry().getState(DrawLayersState.class);
 
         Editor editor = new Editor(editorState, applicationContext.getCommandExecutor());
         applicationContext.getEventBus().listenFor(DrawModeEvent.class, editor::handle);
@@ -24,30 +26,13 @@ public class EditorApplicationComponent implements ApplicationComponent  {
             }
         });
 
-//        applicationContext.getEventBus().listenFor(CanvasResizeEvent.class, event -> {
-//            Board currentBoard = boardState.getBoard().get();
-//
-//            if (event.getEventType() == CanvasResizeEvent.Type.INCREASE) {
-//                final int newWidth = currentBoard.getWidth() + 1;
-//                final int newHeight = currentBoard.getHeight() + 1;
-//                boardState.getBoard().set(new BoundedBoard(newWidth, newHeight));
-//                editorState.getEditingBoard().set(new BoundedBoard(newWidth, newHeight));
-//            } else {
-//                final int newWidth = currentBoard.getWidth() - 1;
-//                final int newHeight = currentBoard.getHeight() - 1;
-//                boardState.getBoard().set(new BoundedBoard(newWidth, newHeight));
-//                editorState.getEditingBoard().set(new BoundedBoard(newWidth, newHeight));
-//            }
-//        });
-
         editorState.getEditingBoard().listen(boardState.getBoard()::set);
 
-
         ToolDrawLayer toolDrawLayer = new ToolDrawLayer(editorState);
-        applicationContext.getMainView().addDrawLayer(toolDrawLayer);
+        drawLayersState.addDrawLayer(toolDrawLayer);
 
         CurrentEditDrawLayer editDrawLayer = new CurrentEditDrawLayer(editorState);
-        applicationContext.getMainView().addDrawLayer(editDrawLayer);
+        drawLayersState.addDrawLayer(editDrawLayer);
     }
 
     @Override

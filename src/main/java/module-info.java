@@ -7,4 +7,6 @@ module org.example {
     exports io.szflis.gameoflife.components.simulator;
     exports io.szflis.app.observable;
     exports io.szflis.gameoflife.components.infobar;
+    exports io.szflis.gameoflife.components.toolbar;
+    exports io.szflis.gameoflife.model.drawlayer;
 }

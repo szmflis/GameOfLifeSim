@@ -1,4 +1,4 @@
-package io.szflis.gameoflife.view;
+package io.szflis.gameoflife.components.toolbar;
 
 import io.szflis.gameoflife.components.resizer.CanvasResizeEvent;
 import io.szflis.gameoflife.components.editor.DrawModeEvent;

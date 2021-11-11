@@ -1,7 +1,7 @@
 package io.szflis.gameoflife.components.editor;
 
 import io.szflis.gameoflife.model.CellPosition;
-import io.szflis.gameoflife.view.AbstractDrawLayer;
+import io.szflis.gameoflife.model.drawlayer.AbstractDrawLayer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
