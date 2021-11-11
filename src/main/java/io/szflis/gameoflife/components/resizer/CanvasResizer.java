@@ -2,6 +2,7 @@ package io.szflis.gameoflife.components.resizer;
 
 import io.szflis.gameoflife.components.board.BoardState;
 import io.szflis.gameoflife.components.editor.EditorState;
+import io.szflis.gameoflife.components.simulationcavnas.SimulationCanvasState;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
 
@@ -9,11 +10,12 @@ public class CanvasResizer {
 
     private final BoardState boardState;
     private final EditorState editorState;
+    private SimulationCanvasState simulationCanvasState;
 
-
-    public CanvasResizer(BoardState boardState, EditorState editorState) {
+    public CanvasResizer(BoardState boardState, EditorState editorState, SimulationCanvasState simulationCanvasState) {
         this.boardState = boardState;
         this.editorState = editorState;
+        this.simulationCanvasState = simulationCanvasState;
     }
 
     public void resize(CanvasResizeEvent canvasResizeEvent) {
@@ -24,11 +26,15 @@ public class CanvasResizer {
                 BoundedBoard biggerBoard = createBiggerCanvas(currentBoard, canvasResizeEvent.getAmount());
                 boardState.getBoard().set(biggerBoard);
                 editorState.getEditingBoard().set(biggerBoard);
+                simulationCanvasState.getCanvasWidth().set(biggerBoard.getWidth());
+                simulationCanvasState.getCanvasHeight().set(biggerBoard.getHeight());
                 break;
             case DECREASE:
                 BoundedBoard smallerBoard = createSmallerCanvas(currentBoard, canvasResizeEvent.getAmount());
                 boardState.getBoard().set(smallerBoard);
                 editorState.getEditingBoard().set(smallerBoard);
+                simulationCanvasState.getCanvasWidth().set(smallerBoard.getWidth());
+                simulationCanvasState.getCanvasHeight().set(smallerBoard.getHeight());
                 break;
         }
     }

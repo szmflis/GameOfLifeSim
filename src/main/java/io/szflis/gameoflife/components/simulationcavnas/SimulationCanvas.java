@@ -1,7 +1,9 @@
-package io.szflis.gameoflife.view;
+package io.szflis.gameoflife.components.simulationcavnas;
 
 import io.szflis.app.event.EventBus;
+import io.szflis.gameoflife.components.board.BoardState;
 import io.szflis.gameoflife.components.editor.BoardEvent;
+import io.szflis.gameoflife.components.resizer.CanvasResizeEvent;
 import io.szflis.gameoflife.model.CellPosition;
 import io.szflis.gameoflife.model.drawlayer.AbstractDrawLayer;
 import io.szflis.gameoflife.model.drawlayer.DrawLayersState;
@@ -20,15 +22,17 @@ public class SimulationCanvas extends Pane {
     private Affine affine;
     private EventBus eventBus;
     private DrawLayersState drawLayersState;
+    private SimulationCanvasState simulationCanvasState;
+    private BoardState boardState;
 
-    private int singleBlockPixelSizeWidth = 30;
-    private int singleBlockPixelSizeHeight = 30;
-    private int canvasWidthInBlocks = 20;
-    private int canvasHeightInBlocks = 20;
-
-    public SimulationCanvas(EventBus eventBus, DrawLayersState drawLayersState) {
+    public SimulationCanvas(EventBus eventBus,
+                            DrawLayersState drawLayersState,
+                            SimulationCanvasState canvasState,
+                            BoardState boardState) {
         this.eventBus = eventBus;
         this.drawLayersState = drawLayersState;
+        this.simulationCanvasState = canvasState;
+        this.boardState = boardState;
 
         setupCanvasHandlers();
         setupCanvasTransforms();
@@ -39,11 +43,22 @@ public class SimulationCanvas extends Pane {
 
     private void setupCanvasTransforms() {
         this.affine = new Affine();
-        this.affine.appendScale(this.singleBlockPixelSizeWidth, this.singleBlockPixelSizeHeight);
+        final int blockPixelSize = simulationCanvasState.getBlockPxSize().get();
+        this.affine.appendScale(blockPixelSize, blockPixelSize);
     }
 
+    private int getCanvasWindowWidth() {
+        return simulationCanvasState.getCanvasWidth().get() * simulationCanvasState.getBlockPxSize().get();
+    }
+
+    private int getCanvasWindowHeight() {
+        return simulationCanvasState.getCanvasHeight().get()
+                * simulationCanvasState.getBlockPxSize().get();
+    }
+
+
     private void setupCanvasHandlers() {
-        this.canvas = new Canvas(canvasWidthInBlocks*singleBlockPixelSizeWidth, canvasHeightInBlocks*singleBlockPixelSizeHeight);
+        this.canvas = new Canvas(getCanvasWindowWidth(), getCanvasWindowHeight());
         this.canvas.setOnMousePressed(this::handlePressed);
         this.canvas.setOnMouseDragged(this::handleCursorMoved);
         this.canvas.setOnMouseReleased(this::handleReleased);
@@ -86,12 +101,16 @@ public class SimulationCanvas extends Pane {
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setTransform(this.affine);
         gc.setFill(Color.LIGHTGRAY);
-        gc.fillRect(0,0,20,20);
+        gc.fillRect(0,0,boardState.getBoard().get().getWidth(),boardState.getBoard().get().getHeight());
 
         for (AbstractDrawLayer drawLayer : drawLayersState.getDrawLayers().get()) {
-            System.out.println("Draw layer: " + drawLayer.toString());
             drawLayer.draw(gc);
         }
+    }
+
+    public void resizeCanvasWindow(int width, int height) {
+        this.canvas.setWidth(width*simulationCanvasState.getBlockPxSize().get());
+        this.canvas.setHeight(height*simulationCanvasState.getBlockPxSize().get());
     }
 
     @Override
@@ -99,4 +118,5 @@ public class SimulationCanvas extends Pane {
         super.resize(v, v1);
         draw();
     }
+
 }
