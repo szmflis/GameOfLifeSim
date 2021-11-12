@@ -4,6 +4,7 @@ import io.szflis.gameoflife.ApplicationComponent;
 import io.szflis.gameoflife.ApplicationContext;
 import io.szflis.gameoflife.components.board.BoardState;
 import io.szflis.gameoflife.components.simulator.SimulatorEvent;
+import io.szflis.gameoflife.components.simulator.SimulatorState;
 import io.szflis.gameoflife.model.Board;
 import io.szflis.gameoflife.model.BoundedBoard;
 import io.szflis.gameoflife.model.drawlayer.DrawLayersState;
@@ -15,6 +16,7 @@ public class EditorApplicationComponent implements ApplicationComponent  {
         EditorState editorState = applicationContext.getStateRegistry().getState(EditorState.class);
         BoardState boardState = applicationContext.getStateRegistry().getState(BoardState.class);
         DrawLayersState drawLayersState = applicationContext.getStateRegistry().getState(DrawLayersState.class);
+        SimulatorState simulatorState = applicationContext.getStateRegistry().getState(SimulatorState.class);
 
         Editor editor = new Editor(editorState, applicationContext.getCommandExecutor());
         applicationContext.getEventBus().listenFor(DrawModeEvent.class, editor::handle);
@@ -23,6 +25,7 @@ public class EditorApplicationComponent implements ApplicationComponent  {
         applicationContext.getEventBus().listenFor(SimulatorEvent.class, event -> {
             if (event.getEventType() == SimulatorEvent.Type.RESET) {
                 boardState.getBoard().set(editorState.getEditingBoard().get());
+                simulatorState.getBoard().set(editorState.getEditingBoard().get());
             }
         });
 

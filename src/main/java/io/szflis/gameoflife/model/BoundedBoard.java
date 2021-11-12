@@ -67,4 +67,14 @@ public class BoundedBoard implements Board {
     public int getHeight() {
         return this.height;
     }
+
+    @Override
+    public void print() {
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
+                System.out.print(getState(x, y) == CellState.ALIVE ? "o" : ".");
+            }
+            System.out.print("\n");
+        }
+    }
 }

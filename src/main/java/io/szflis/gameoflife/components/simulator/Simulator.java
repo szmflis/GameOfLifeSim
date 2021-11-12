@@ -13,7 +13,6 @@ public class Simulator {
     private Simulation simulation;
     private SimulatorState state;
     private CommandExecutor commandExecutor;
-    // only simulator cares about it, never persisted, so not in state
     private boolean reset = true;
 
     public Simulator(SimulatorState state, CommandExecutor commandExecutor) {
